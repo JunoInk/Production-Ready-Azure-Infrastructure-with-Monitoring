@@ -1,0 +1,13 @@
+resource "azurerm_virtual_machine_extension" "datadog" {
+  name                 = "datadog-agent"
+  virtual_machine_id   = var.vm_id
+  publisher            = "Microsoft.Azure.Extensions"
+  type                 = "CustomScript"
+  type_handler_version = "2.1"
+
+  settings = <<SETTINGS
+    {
+      "commandToExecute": "DD_API_KEY=${var.datadog_api_key} bash -c \"$(curl -L https://s3.amazonaws.com/dd-agent/scripts/install_script.sh)\""
+    }
+SETTINGS
+}
